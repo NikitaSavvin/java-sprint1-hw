@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class Calendar {
-    public static HashMap<String, String> calendar() {
+    public static HashMap<String, String> convertNumberToMmonth() {
         HashMap<String, String> calendar = new HashMap<>();
         calendar.put("01", "Январь");
         calendar.put("02", "Февраль");

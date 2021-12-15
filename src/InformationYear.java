@@ -2,58 +2,51 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InformationYear {
-    public static void informationYear() {
-        HashMap<String, String> calendar = Calendar.calendar();
-        HashMap<String, HashMap> dataYears = YearlyReport.yearlyReport();
+    public static void printInformationYear(HashMap<String, HashMap> dataYear) {
+        HashMap<String, String> calendar = Calendar.convertNumberToMmonth();
         ArrayList<String> withoutDublicateMoutn = new ArrayList<>();
-        HashMap<String, ArrayList<? extends Integer>> withoutDublicateMoutnIndex = new HashMap<>();
-        ArrayList<String> month;
-        ArrayList<Integer> amount;
-        ArrayList<Boolean> isExpense;
-        HashMap<String, ArrayList<? extends Integer>> dublicate = new HashMap<>();
+        HashMap<String, ArrayList> withoutDublicateMoutnIndex = new HashMap<>();
+        HashMap<String, ArrayList> dublicate = new HashMap<>();
         HashMap<String, Integer> report = new HashMap<>();
         ArrayList<Integer> spends = new ArrayList<>();
         ArrayList<Integer> gains = new ArrayList<>();
-        for (String year : dataYears.keySet()) {
+        for (String year : dataYear.keySet()) {
             int profit = 0;
             System.out.println("Рассматривается " + year + " год");
-            month = (ArrayList<String>) dataYears.get(year).get("month");
-            amount = (ArrayList<Integer>) dataYears.get(year).get("amount");
-            isExpense = (ArrayList<Boolean>) dataYears.get(year).get("is_expense");
-            for (String numMount : month) {
+            ArrayList<ArrayList> yearReport = YearRow.creatListDataYear(dataYear, year);
+            for (Object numMount : yearReport.get(0)) {
                 ArrayList<Integer> dubleIndex = new ArrayList<>();
                 if (!withoutDublicateMoutn.contains(numMount)) {
-                    withoutDublicateMoutn.add(numMount);
+                    withoutDublicateMoutn.add((String) numMount);
                 }
-                int firstIndex = month.indexOf(numMount);
-                int lastIndex = month.lastIndexOf(numMount);
+                int firstIndex = yearReport.get(0).indexOf(numMount);
+                int lastIndex = yearReport.get(0).lastIndexOf(numMount);
                 dubleIndex.add(firstIndex);
                 dubleIndex.add(lastIndex);
-                dublicate.put(numMount, dubleIndex);
+                dublicate.put((String) numMount, dubleIndex);
             }
             for (String numMount : withoutDublicateMoutn) {
                 withoutDublicateMoutnIndex.put(numMount, dublicate.get(numMount));
             }
             for (String numMount : withoutDublicateMoutnIndex.keySet()) {
-                for (Integer index : withoutDublicateMoutnIndex.get(numMount)) {
-                    if (isExpense.get(index)) {
-                        profit -= amount.get(index);
-
+                for (Object index : withoutDublicateMoutnIndex.get(numMount)) {
+                    if ((Boolean) yearReport.get(2).get((Integer) index)) {
+                        profit -= (Integer) yearReport.get(1).get((Integer) index);
                     } else {
-                        profit += amount.get(index);
+                        profit += (Integer) yearReport.get(1).get((Integer) index);
                     }
                 }
                 report.put(numMount, profit);
             }
             for (String mount : report.keySet()) {
-                System.out.println("За " + calendar.get(mount) + " Прибыль составила - "
-                        + report.get(mount));
+                System.out.println("За " + calendar.get(mount) +
+                        " Прибыль составила - " + report.get(mount));
             }
-            for (int i = 0; i < isExpense.size(); i++) {
-                if (isExpense.get(i)) {
-                    spends.add(amount.get(i));
+            for (int i = 0; i < yearReport.get(2).size(); i++) {
+                if ((Boolean) yearReport.get(2).get(i)) {
+                    spends.add((Integer) yearReport.get(1).get(i));
                 } else {
-                    gains.add(amount.get(i));
+                    gains.add((Integer) yearReport.get(1).get(i));
                 }
             }
             int spend = 0;

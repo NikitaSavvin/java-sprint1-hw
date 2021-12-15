@@ -2,57 +2,51 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VerificationData {
-    public static void verificationData(){
-        HashMap<String, String> calendar = Calendar.calendar();
-        HashMap<ArrayList, HashMap> dataMounts = MonthlyReport.monthlyReport();
-        HashMap<String, HashMap> dataYears = YearlyReport.yearlyReport();
-        ArrayList<String> itemName = new ArrayList<>();
-        ArrayList<Boolean> isExpense = new ArrayList<>();
-        ArrayList<Integer> quantity = new ArrayList<>();
-        ArrayList<Integer> sumOfOone= new ArrayList<>();
-        ArrayList<String> month;
-        ArrayList<Integer> amount;
+    public static void verificationData(HashMap<String, HashMap> dataMount,
+                                        HashMap<String, HashMap> dataYear) {
+        HashMap<String, String> calendar = Calendar.convertNumberToMmonth();
         ArrayList<Boolean> incomeAnswer = new ArrayList<>();
         ArrayList<Boolean> wasteAnswer = new ArrayList<>();
-
-        for(ArrayList dateMount : dataMounts.keySet()){
-            itemName = (ArrayList<String>) dataMounts.get(dateMount).get("item_name");
-            isExpense = (ArrayList<Boolean>) dataMounts.get(dateMount).get("is_expense");
-            quantity = (ArrayList<Integer>) dataMounts.get(dateMount).get("quantity");
-            sumOfOone = (ArrayList<Integer>) dataMounts.get(dateMount).get("sum_of_one");
+        for (String numMount : dataMount.keySet()) {
+            ArrayList<ArrayList> monthReportRows = MonthRow.creatListDataMount(dataMount, numMount);
             int income = 0;
             int waste = 0;
-            for(int i = 0; i <isExpense.size(); i++) {
-                if (!isExpense.get(i)) {
-                    income += quantity.get(i) * sumOfOone.get(i);
-                } else{
-                    waste += quantity.get(i) * sumOfOone.get(i);
+            for (int i = 0; i < monthReportRows.get(1).size(); i++) {
+                if (!((Boolean) monthReportRows.get(1).get(i))) {
+                    income += (Integer) monthReportRows.get(2).get(i) *
+                            (Integer) monthReportRows.get(3).get(i);
+                } else {
+                    waste += (Integer) monthReportRows.get(2).get(i) *
+                            (Integer) monthReportRows.get(3).get(i);
                 }
             }
-            for(String year : dataYears.keySet()){
-                month = (ArrayList<String>) dataYears.get(year).get("month");
-                amount = (ArrayList<Integer>) dataYears.get(year).get("amount");
-                isExpense = (ArrayList<Boolean>) dataYears.get(year).get("is_expense");
-                for(int i =0; i < month.size(); i++) {
-                    if (month.get(i).equals(dateMount.get(0)) && isExpense.get(i).equals(false)) {
-                        if (!(income == amount.get(i))) {
-                            System.out.println("Данные по доходу за " + calendar.get(month.get(i)) + " не совпадают");
-                        } else{
+            for (String year : dataYear.keySet()) {
+                ArrayList<ArrayList> yearReport = YearRow.creatListDataYear(dataYear, year);
+                for (int i = 0; i < yearReport.get(0).size(); i++) {
+                    if (yearReport.get(0).get(i).equals(numMount) &&
+                            yearReport.get(2).get(i).equals(false)) {
+                        if (!(income == (Integer) yearReport.get(1).get(i))) {
+                            System.out.println("Данные по доходу за " +
+                                    calendar.get(yearReport.get(0).get(i)) + " не совпадают");
+                            incomeAnswer.add(false);
+                        } else {
                             incomeAnswer.add(true);
                         }
-                    } else if (month.get(i).equals(dateMount.get(0)) && isExpense.get(i).equals(true)) {
-                        if (!(waste == amount.get(i))) {
-                            System.out.println("Данные по расходам за " + calendar.get(month.get(i)) + " не совпадают");
-                        } else{
+                    } else if (yearReport.get(0).get(i).equals(numMount) &&
+                            yearReport.get(2).get(i).equals(true)) {
+                        if (!(waste == (Integer) yearReport.get(1).get(i))) {
+                            System.out.println("Данные по расходам за " +
+                                    calendar.get(yearReport.get(0).get(i)) + " не совпадают");
+                            incomeAnswer.add(false);
+                        } else {
                             wasteAnswer.add(true);
                         }
                     }
-
                 }
             }
-            }
-            if(!(incomeAnswer.contains(false)&&wasteAnswer.contains(false))){
-                System.out.println("Успешное завершение операции");
-            }
+        }
+        if (!(incomeAnswer.contains(false) | wasteAnswer.contains(false))) {
+            System.out.println("Успешное завершение операции");
+        }
     }
 }
