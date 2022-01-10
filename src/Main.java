@@ -1,33 +1,57 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public abstract class Main {
     public static void main(String[] args) {
-        HashMap<String, String> calendar = Calendar.convertNumberToMmonth();
+        HashMap<Integer, String> calendar = Calendar.convertNumberToMmonth();
         Scanner scanner = new Scanner(System.in);
-        HashMap<String, HashMap> dataMount = null;
-        HashMap<String, HashMap> dataYear = null;
+        ArrayList<MonthRow> dataMount = null;
+        ArrayList<YearRow> dataYear = null;
+        for (YearRow yearRow : dataYear = YearlyReport.creatDataYearlyReport()) {
+            System.out.println(yearRow);
+        }
+
         while (true) {
             printMenu();
             int command = scanner.nextInt();
             if (command == 1) {
                 System.out.println("-----------------------Ответ------------------------");
                 dataMount = MonthlyReport.creatDataMonthlyReport();
-                for (String date : dataMount.keySet()) {
-                    System.out.println("Отчет за " + calendar.get(date));
-                    System.out.println(dataMount.get(date));
+                for (int i = 0; i < dataMount.size(); i++) {
+                    System.out.println("--------------------------------------------------------");
+                    System.out.println("Отчет за " + calendar.get(i));
+                    System.out.println("Номенклатура");
+                    System.out.println(dataMount.get(i).itemName);
+                    System.out.println("Доходы-false/Расходы-true");
+                    System.out.println(dataMount.get(i).isExpense);
+                    System.out.println("Количество");
+                    System.out.println(dataMount.get(i).quantity);
+                    System.out.println("Цена шт");
+                    System.out.println(dataMount.get(i).sumOfOne);
+                    System.out.println("--------------------------------------------------------");
                 }
             } else if (command == 2) {
                 System.out.println("-----------------------Ответ------------------------");
                 dataYear = YearlyReport.creatDataYearlyReport();
-                for (String year : dataYear.keySet()) {
+                HashMap<String, String> dataY = ProcessorFiles.processYearlyFiles();
+                for (String year : dataY.values()) {
+                    System.out.println("--------------------------------------------------------");
                     System.out.println("Отчет за " + year + " год");
-                    System.out.println(dataYear.get(year));
+                    for (int i = 0; i < dataY.size(); i++) {
+                        System.out.println("Номера месяцев");
+                        System.out.println(dataYear.get(i).month);
+                        System.out.println("Доходы/расходы");
+                        System.out.println(dataYear.get(i).amount);
+                        System.out.println("Доходы-false/Расходы-true");
+                        System.out.println(dataYear.get(i).isExpense);
+                    }
+                    System.out.println("--------------------------------------------------------");
                 }
             } else if (command == 3) {
                 System.out.println("-----------------------Ответ------------------------");
                 try {
-                    VerificationData.verificationData(dataMount, dataYear);
+                    VerificationData.printVerificationData(dataMount, dataYear);
                 } catch (NullPointerException e) {
                     printErrorCommand3();
                 }
@@ -82,3 +106,4 @@ public abstract class Main {
         System.out.println("повторите попытку снова");
     }
 }
+

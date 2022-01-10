@@ -2,33 +2,35 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InformationMonth {
-
-    public static void printInformationMonth(HashMap<String, HashMap> dataMount) {
-        HashMap<String, String> calendar = Calendar.convertNumberToMmonth();
-        for (String numMount : dataMount.keySet()) {
-            System.out.println("Информация за " + calendar.get(numMount) + ":");
-            String mostProduct = "";
-            String nameWasteProduct = "";
-            int sumMostProduct = 0;
-            int maxWasteProduct = 0;
-            ArrayList<ArrayList> monthReportRows = MonthRow.creatListDataMount(dataMount, numMount);
-            for (int i = 0; i < monthReportRows.get(1).size(); i++) {
-                int sumProduct = 0;
-                int wasteProduct = 0;
-                if (!((boolean) monthReportRows.get(1).get(i))) {
-                    sumProduct = (Integer) monthReportRows.get(2).get(i) *
-                            (Integer) monthReportRows.get(3).get(i);
+    public static void printInformationMonth(ArrayList<MonthRow> data) {
+        HashMap<Integer, String> calendar = Calendar.convertNumberToMmonth();
+        String mostProduct = null;
+        int sumMostProduct = 0;
+        String nameWasteProduct = null;
+        int maxWasteProduct = 0;
+        for (int i = 0; i < data.size(); i++) {
+            System.out.println("Информация за " + calendar.get(i) + ":");
+            mostProduct = "";
+            nameWasteProduct = "";
+            sumMostProduct = 0;
+            maxWasteProduct = 0;
+            int sumProduct = 0;
+            int wasteProduct = 0;
+            for (int n = 0; n < data.get(i).itemName.size(); n++) {
+                int sum = data.get(i).quantity.get(n) * data.get(i).sumOfOne.get(n);
+                String product = data.get(i).itemName.get(n);
+                if (!data.get(i).isExpense.get(n)) {
+                    sumProduct = sum;
                 } else {
-                    wasteProduct = (Integer) monthReportRows.get(2).get(i) *
-                            (Integer) monthReportRows.get(3).get(i);
+                    wasteProduct = sum;
                 }
                 if (sumMostProduct < sumProduct) {
                     sumMostProduct = sumProduct;
-                    mostProduct = (String) monthReportRows.get(0).get(i);
+                    mostProduct = product;
                 }
                 if (maxWasteProduct < wasteProduct) {
                     maxWasteProduct = wasteProduct;
-                    nameWasteProduct = (String) monthReportRows.get(0).get(i);
+                    nameWasteProduct = product;
                 }
             }
             System.out.println("Самый прибыльный товар : " + mostProduct +
@@ -36,6 +38,5 @@ public class InformationMonth {
             System.out.println("Самая большая трата вышла на " + nameWasteProduct +
                     ". На общую сумму - " + maxWasteProduct);
         }
-
     }
 }

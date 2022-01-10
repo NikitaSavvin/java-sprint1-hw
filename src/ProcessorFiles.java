@@ -1,17 +1,18 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ProcessingFiles {
-    public static HashMap<String, ArrayList<String>> processingMonthlyFiles() {
+public class ProcessorFiles {
+    public static HashMap<String, ArrayList<String>> processMonthlyFiles() {
         File dir = new File("resources");
         List<File> files = new ArrayList<>();
         for (File file : dir.listFiles()) {
             if (file.isFile())
                 files.add(file);
         }
-        HashMap<String, ArrayList<String>> fileDateMY = new HashMap<>();
+        LinkedHashMap<String, ArrayList<String>> fileDateMY = new LinkedHashMap<>();
         ArrayList<String> path = new ArrayList<>();
         ArrayList<ArrayList> listDateMY = new ArrayList<>();
         ArrayList<String> pathMount = new ArrayList<>();
@@ -36,7 +37,7 @@ public class ProcessingFiles {
         return fileDateMY;
     }
 
-    public static HashMap<String, String> processingYearlyFiles() {
+    public static HashMap<String, String> processYearlyFiles() {
         File dir = new File("resources");
         List<File> files = new ArrayList<>();
         for (File file : dir.listFiles()) {

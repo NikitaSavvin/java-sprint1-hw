@@ -1,20 +1,20 @@
 import java.util.HashMap;
 
 public class Calendar {
-    public static HashMap<String, String> convertNumberToMmonth() {
-        HashMap<String, String> calendar = new HashMap<>();
-        calendar.put("01", "Январь");
-        calendar.put("02", "Февраль");
-        calendar.put("03", "Март");
-        calendar.put("04", "Апрель");
-        calendar.put("05", "Май");
-        calendar.put("06", "Июнь");
-        calendar.put("07", "Июль");
-        calendar.put("08", "Август");
-        calendar.put("09", "Сентябрь");
-        calendar.put("10", "Октябрь");
-        calendar.put("11", "Ноябрь");
-        calendar.put("12", "Декабрь");
+    public static HashMap<Integer, String> convertNumberToMmonth() {
+        HashMap<Integer, String> calendar = new HashMap<>();
+        calendar.put(0, "Январь");
+        calendar.put(1, "Февраль");
+        calendar.put(2, "Март");
+        calendar.put(3, "Апрель");
+        calendar.put(4, "Май");
+        calendar.put(5, "Июнь");
+        calendar.put(6, "Июль");
+        calendar.put(7, "Август");
+        calendar.put(8, "Сентябрь");
+        calendar.put(9, "Октябрь");
+        calendar.put(10, "Ноябрь");
+        calendar.put(11, "Декабрь");
         return calendar;
     }
 }
